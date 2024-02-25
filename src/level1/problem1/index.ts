@@ -7,11 +7,17 @@ export type Value = string | number | boolean | null | undefined |
  * compatible objects.
  */
 export function serialize(value: Value): unknown {
-  /**
-   * insert your code here
-   */
-  
-  return;
+  switch (typeof value) {
+    case "string":
+      return value.toString();
+    case "number":
+      return value;
+    case "boolean":
+      return value
+    case "undefined":
+      return value;
+  }
+  return null;
 }
 
 /**
@@ -22,6 +28,6 @@ export function deserialize<T = unknown>(value: unknown): T {
   /**
    * insert your code here
    */
-  
+
   return;
 }
