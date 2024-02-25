@@ -9,16 +9,15 @@ export type Value = string | number | boolean | null | undefined |
 export function serialize(value: Value): unknown {
   // Scalars
   switch (typeof value) {
+    // My old solution has repeating patterns so I just need to group it in order to improve the efficiency
     case "string":
-      return value.toString();
     case "number":
-      return value;
     case "boolean":
-      return value
     case "undefined":
       return value;
     // Serializing objects
     case "object":
+      // I found in the documentation that null is kind of a special case object where the only way to check if it is null is to check that the value is indeed === null
       if (value == null) {
         return null;
       }
@@ -43,6 +42,14 @@ export function serialize(value: Value): unknown {
             __t: "Date",
             __v: (value as Date).getTime()
           }
+        // Serializing arrays and objects with recursion
+        // Since I have all the base cases covered, I can just use the default case to cover all the other cases
+        case 'Array':
+          return Array.from(value as Array<any>, v => serialize(v));
+        case 'Object':
+          return Object.fromEntries(
+            Object.entries(value).map(([k, v]) => [k, serialize(v)])
+          );
       }
   }
 }
