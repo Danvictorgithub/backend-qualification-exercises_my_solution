@@ -43,8 +43,6 @@ export function serialize(value: Value): unknown {
             __t: "Date",
             __v: (value as Date).getTime()
           }
-        default:
-        // handle other cases
       }
   }
 }
