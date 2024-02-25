@@ -59,9 +59,35 @@ export function serialize(value: Value): unknown {
  * scalar and objects.
  */
 export function deserialize<T = unknown>(value: unknown): T {
-  /**
-   * insert your code here
-   */
+  if (value == null || typeof value !== 'object') {
+    return value as T;
+  }
 
-  return;
+  if (Array.isArray(value)) {
+    return (value as Array<any>).map(v => deserialize(v)) as unknown as T;
+  }
+
+  if (value.hasOwnProperty('__t')) {
+    switch ((value as any).__t) {
+      case 'Map':
+        return new Map((value as any).__v.map(([k, v]: [unknown, unknown]) => [k, deserialize(v)])) as unknown as T;
+      case 'Set':
+        return new Set((value as any).__v.map((v: unknown) => deserialize(v))) as unknown as T;
+      case 'Buffer':
+        return Buffer.from((value as any).__v) as unknown as T;
+      case 'Date':
+        return new Date((value as any).__v) as unknown as T;
+    }
+  }
+
+  // Same to reversing from serialization
+  // case "string":
+  //   case "number":
+  //   case "boolean":
+  //   case "undefined":
+  // return value;
+
+  return Object.fromEntries(
+    Object.entries(value).map(([k, v]) => [k, deserialize(v)])
+  ) as unknown as T;
 }
