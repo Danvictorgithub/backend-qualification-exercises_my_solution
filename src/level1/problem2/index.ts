@@ -1,8 +1,16 @@
-import crypto from 'crypto';
+// import crypto from 'crypto';
 export class ObjectId {
+  private static fourBitsRandom = new Uint8Array([
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256),
+    Math.floor(Math.random() * 256)]);
+  private static counter = Math.floor(Math.random() * (Math.pow(2, 24)));
   private data: Buffer;
-  private static fourBitsRandom = crypto.randomBytes(4); // Not sure if this is valid
-  private static counter = Math.floor(Math.random() * (Math.pow(2, 24))); // Not sure if this is valid
+
+
+  // private static fourBitsRandom = crypto.randomBytes(4); // Not sure if this is valid
+  // private static counter = Math.floor(Math.random() * (Math.pow(2, 24))); // Not sure if this is valid
   constructor(type: number, timestamp: number) {
     // This solution doesn't work
     // let fourBitsRandom = crypto.randomBytes(4);
